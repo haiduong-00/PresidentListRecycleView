@@ -1,6 +1,7 @@
 package com.example.presidentlistrecycleview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -37,6 +39,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.tv_presName.setText(presidentList.get(position).getName());
         holder.tv_presElectionDate.setText(String.valueOf(presidentList.get(position).getDateOfElection())); // integer cannot be set as set text: integer -> string
         Glide.with(this.context).load(presidentList.get(position).getImageURL()).into(holder.iv_presPic);
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // send the control to the EditOneItem activity
+                Intent intent = new Intent(context, AddEditOne.class);
+                intent.putExtra("id", presidentList.get(position).getId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -48,12 +59,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageView iv_presPic;
         TextView tv_presName;
         TextView tv_presElectionDate;
+        ConstraintLayout parentLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             iv_presPic = itemView.findViewById(R.id.iv_presidentPicture);
             tv_presName = itemView.findViewById(R.id.tv_presidentName);
             tv_presElectionDate = itemView.findViewById(R.id.tv_dateElection);
+            parentLayout = itemView.findViewById(R.id.oneLinePresidentLayout);
         }
     }
 }
